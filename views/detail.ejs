@@ -1,0 +1,30 @@
+<%- include('partials/head'); %>
+
+<body>
+
+	<%- include('partials/navbar'); %>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 col-lg-10 col-sm-offset-3 col-lg-offset-1">
+				<div class="thumbnail">
+   				<img src=<%= '/public/images/products/' + product.image %> alt="pdto image">
+   				<div class="caption">
+     					<h3><%= product.name %></h3>
+     					<p><b>$ <%= product.price %></b></p>
+     					<p><%= product.shortDescription %></p>
+     					<p><%= product.longDescription %></p>
+						<form action="/product/delete/<%= product._id %>" method="post">
+							<button type="submit" class="btn btn-danger">Eliminar</button>
+							<a href="/product/edit/<%= product._id %>" class="btn btn-warning">Editar</a>
+							<a href="/" class="btn btn-info">volver</a>
+						</form>
+   				</div>
+ 				</div>
+			</div>
+		</div>
+	</div>
+
+	<%- include('partials/scripts.ejs') %>
+</body>
+</html>

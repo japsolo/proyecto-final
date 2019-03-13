@@ -1,0 +1,115 @@
+<%- include('partials/head'); %>
+
+<body>
+
+	<%- include('partials/navbar'); %>
+
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Formulario para crear un producto</h1>
+			<p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		</div>
+
+		<% if(error !== '') { %>
+			<div class="alert alert-danger">
+				<%= error %>
+			</div>
+		<% } %>
+
+		<div class="row">
+			<form action="/create" method="post" enctype="multipart/form-data" id="formCreate">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Nombre del producto:</label>
+						<div class="input-group">
+							<div class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></div>
+							<input type="text" name="name" class="form-control">
+    					</div>
+						<span class="help-block"></span>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Precio del producto:</label>
+						<div class="input-group">
+							<div class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></div>
+							<input type="text" class="form-control" name="price">
+    					</div>
+						<span class="help-block"></span>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Descripción corta del producto:</label>
+						<textarea name="shortDescription" class="form-control"></textarea>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Descripción larga del producto:</label>
+						<textarea name="longDescription" class="form-control"></textarea>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Imagen del producto:</label>
+						<div class="input-group">
+							<div class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></div>
+							<input type="file" name="image" class="form-control">
+    					</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<br>
+					<button type="submit" class="btn btn-lg btn-success">Guardar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<%- include('partials/scripts') %>
+
+	<script>
+		let form = document.querySelector('#formCreate');
+		let inputName = document.querySelector('[name=name]');
+		let inputPrice = document.querySelector('[name=price]');
+		let inputImage = document.querySelector('[name=image]');
+
+		function isEmpty () {
+			let spanError = this.parentElement.parentElement.querySelector('.help-block');
+			let inputTag = this.getAttribute('name');
+			switch (inputTag) {
+				case 'name':
+					inputTag = 'nombre';
+					break;
+				case 'price':
+					inputTag = 'precio';
+					break;
+			}
+			if (this.value.trim() === '') {
+				this.parentElement.parentElement.classList.add('has-error');
+				spanError.innerHTML = '¡Poneme el <b>' + inputTag + '</b> del producto porfis!';
+			} else {
+				this.parentElement.parentElement.classList.remove('has-error');
+				spanError.innerHTML = '';
+			}
+		}
+
+		inputName.addEventListener('blur', isEmpty);
+		inputPrice.addEventListener('blur', isEmpty);
+
+		form.addEventListener('submit', function (e) {
+			if (inputName.value === '') {
+				inputName.parentElement.parentElement.classList.add('has-error');
+			}
+			if (inputPrice.value === '') {
+				inputPrice.parentElement.parentElement.classList.add('has-error');
+			}
+			if (inputName.value === '' || inputPrice.value === '' || inputImage.value.length <= 0) {
+				e.preventDefault();
+				window.alert('Ey wacho llena los campos');
+			}
+		});
+	</script>
+</body>
+</html>
