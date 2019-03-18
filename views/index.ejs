@@ -1,7 +1,7 @@
-<%- include('partials/head'); %>
+<%# La función include() nos permite pasar variables al archivo que estamos incluyendo, en este caso le pasamos una variable "title" para poderla imprimir dentro de la etiqueta <title>, así tenemos un texto en la pestañan del browser. %>
+<%- include('partials/head', { title: 'Inicio' }); %>
 
 <body>
-
 	<%- include('partials/navbar'); %>
 
 	<div class="container">
@@ -27,7 +27,6 @@
 									>
 										Detalle
 									</a>
-									<a href="/" class="btn btn-warning" role="button">Editar</a>
 								</p>
 	      				</div>
 	    				</div>

@@ -21,7 +21,8 @@ const upload = multer({ storage: storage });
 const app = express();
 
 // Server port and listenin
-app.listen(2020, () => console.log('App running un 2020 port'));
+const Port = 2020;
+app.listen(Port, () => console.log('App running un ' + Port + ' port'));
 
 // Set template engine
 app.set('view engine', 'ejs');
@@ -78,13 +79,41 @@ app.get('/', (req, res) => {
 });
 
 // Rutas de edición - Start
+/*
+	Lo primero que necesitamos es el formulario de edición. A ese formulario le tenemos que pasar el producto que vamos a editar, por eso necesitamos hacer un findOne() y ese resultado pasarlo a la view del formulario de edición.
+*/
 app.get('/product/edit/:id', (req, res) => {
 	Product.findOne({ _id: req.params.id }, (error, result) => {
 		if (error) {
 			res.send(error);
 		}
-		res.json(result);
+		res.render('edit', {
+			product: result
+		});
 	});
+});
+
+/*
+	Esta ruta es la que va a procesar el pedido POST enviado desde el formulario anterior. Aquí lo que tenemos que hacer es un proceso de: encontrar el producto que estamos editando y hacerle un update de la data que llega del formulario. Para ello vamos a usar el método findByIdAndUpdate().
+
+	Éste método recibe 3 parámetros:
+		1. Lo que estamos buscando
+		2. El objeto literal con la data que vamos a guardar
+		3. El callback con el error y result del query
+*/
+app.post('/product/edit/:id', upload.single('image'), (req, res) => {
+	req.body.slug = req.body.name.toLowerCase().replace(/ /g, '-');
+	req.body.image = req.file.filename;
+	Product.findByIdAndUpdate(
+		{ _id: req.params.id },
+		req.body,
+		(error, result) => {
+			if (error) {
+				res.send('No se pudo actualizar el producto');
+			}
+			res.redirect('/');
+		}
+	);
 });
 // Rutas de edición - End
 
